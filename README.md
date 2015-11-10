@@ -10,7 +10,7 @@ This does not reflect what the implementations do, but what the editor thinks wh
 
 
 The amendments are relative to the last ECMAScript specification draft found at: http://tc39.github.io/ecma262/
-In the algorithms, the changes relative to the spec are marked in **bold**.
+Changes relative to existing algorithms  are marked in **bold**.
 
 ## [%RegExp%](http://tc39.github.io/ecma262/#sec-regexp-constructor)
 
