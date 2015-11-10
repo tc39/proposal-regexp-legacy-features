@@ -2,7 +2,7 @@
 
 This is a specification draft for the RegExp legacy static properties in JavaScript. See: [tc39/ecma262#137](https://github.com/tc39/ecma262/issues/137)
 
-This does not reflect what the implementations do, but what the editor thinks what the least bad thing they ought to do in order to maintain web compatibility.
+This does not reflect what the implementations do, but what the editor thinks to be the least bad thing they ought to do in order to maintain web compatibility.
 
 * The values returned by those properties are updated each time a successful match is done.
 * They are updated only for direct instances of RegExp.
@@ -36,7 +36,7 @@ The initial value of all these internal slots is the empty String.
 
 ## [RegExpAlloc ( _newTarget_ )](http://tc39.github.io/ecma262/#sec-regexpalloc)
 
-RegExp instances have an additional slot, which optionally points to the object whose static properties should be updated after a successful match, namely %RegExp%. The RegExpAlloc abstraction operation is modified as follows:
+RegExp instances have an additional slot, which optionally points to the object whose static properties should be updated after a successful match, namely %RegExp%. The RegExpAlloc abstract operation is modified as follows:
 
 1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[LegacyConstructor]]**»).
 1. **If _newTarget_ is %RegExp%, let _legacyConstructor_ be %RegExp%; else, let _legacyConstructor_ be __undefined__.**
@@ -48,7 +48,7 @@ RegExp instances have an additional slot, which optionally points to the object 
 
 ## [RegExpBuiltInExec ( _R_, _S_ )](http://tc39.github.io/ecma262/#sec-regexpbuiltinexec)
 
-In the RegExpBuiltInExec abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The three last steps of the algorithm are modified as follows:
+In the RegExpBuiltInExec abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The last three steps of the algorithm are modified as follows:
 
 1. ...
 1. Perform CreateDataProperty(_A_, "0", _matchedSubstr_).
