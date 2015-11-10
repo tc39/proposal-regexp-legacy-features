@@ -76,13 +76,13 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
 5. Assert: _capturedValues_ is a List of Strings.
 6. Let _n_ be the number of elements in _capturedValues_.
 1. Set the value of _C_’s [[RegExpInput]] internal slot to _S_.
-1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to a String whose length is _endIndex_ - _startIndex_ and containing the code units from S with indices _startIndex_ through _endIndex_ - 1, in ascending order.
+1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to a String whose length is _endIndex_ - _startIndex_ and containing the code units from _S_ with indices _startIndex_ through _endIndex_ - 1, in ascending order.
 1. If _n_ > 0, set the value of _C_’s [[RegExpLastParen]] internal slot to the last element of _capturedValues_.
 1. Else, set the value of _C_’s [[RegExpLastParen]] internal slot to the empty String.
-1. Set the value of _C_’s [[RegExpLeftContext]] internal slot to a String whose length is _startIndex_ and containing the code units from S with indices 0 through _startIndex_ - 1, in ascending order.
-1. Set the value of _C_’s [[RegExpRightContext]] internal slot to a String whose length is _len_ - _endIndex_ and containing the code units from S with indices _endIndex_ through _len_ - 1, in ascending order.
-1. For each integer _i_ such that _i_ > 0 and _i_ ≤ 9
-    1. If _n_ ≤ _i, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the <i>i</i>th element of _capturedValues_.
+1. Set the value of _C_’s [[RegExpLeftContext]] internal slot to a String whose length is _startIndex_ and containing the code units from _S_ with indices 0 through _startIndex_ - 1, in ascending order.
+1. Set the value of _C_’s [[RegExpRightContext]] internal slot to a String whose length is _len_ - _endIndex_ and containing the code units from _S_ with indices _endIndex_ through _len_ - 1, in ascending order.
+1. For each integer _i_ such that 1 ≤ _i_ ≤ 9
+    1. If _i_ ≤ _n_, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the <i>i</i>th element of _capturedValues_.
     1. Else, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the empty String.
     
 Additional properties of the RegExp constructor
