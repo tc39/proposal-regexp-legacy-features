@@ -48,7 +48,7 @@ RegExp instances have an additional slot, which optionally points to the object 
 
 ## [RegExpBuiltInExec ( _R_, _S_ )](http://tc39.github.io/ecma262/#sec-regexpbuiltinexec)
 
-In The RegExpBuiltInExec abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The three last steps of the algorithm are modified as follows:
+In the RegExpBuiltInExec abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The three last steps of the algorithm are modified as follows:
 
 1. ...
 1. Perform CreateDataProperty(_A_, "0", _matchedSubstr_).
@@ -92,77 +92,96 @@ All the below properties are accessor properties with attributes {[[Set]]: undef
 
 ### get input
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
 ### get $_
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
 ### get lastMatch
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
 ### get $&
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
 ### get lastParen
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
 ### get $+
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
 ### get leftContext
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
 ### get $`
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
 ### get rightContext
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
 ### get $'
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
 ### get $1
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen1]] internal slot.
 
 ### get $2
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen2]] internal slot.
 
 ### get $3
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen3]] internal slot.
 
 ### get $4
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen4]] internal slot.
 
 ### get $5
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen5]] internal slot.
 
 ### get $6
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen6]] internal slot.
 
 ### get $7
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen7]] internal slot.
 
 ### get $8
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen8]] internal slot.
 
 ### get $9
 
+1. If SameValue(this value, %RegExp%) is false, return undefined.
 1. Return the value of %RegExp%’s [[RegExpParen9]] internal slot.
 
