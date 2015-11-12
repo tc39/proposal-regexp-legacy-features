@@ -9,8 +9,11 @@ This does not reflect what the implementations do, but what the editor thinks to
 
 The proposal includes another feature that needs consensus and implementation experience before being specced:
 
-* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp (and anecdotically for cross-realm regexpes). ***TODO: Write a motivation for that feature.***
+* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp (and anecdotically for cross-realm regexpes). 
 
+[See the motivation here.](subclass-restriction-motivation.md)
+
+----
 
 The amendments are relative to the last ECMAScript specification draft found at: http://tc39.github.io/ecma262/
 Changes relative to existing algorithms  are marked in **bold**.
