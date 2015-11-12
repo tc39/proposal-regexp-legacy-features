@@ -87,109 +87,107 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
     1. If _i_ ≤ _n_, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the <i>i</i>th element of _capturedValues_.
     1. Else, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the empty String.
     
-Additional properties of the RegExp constructor
-================================================
+## Additional properties of the RegExp constructor
 
 All the below properties are accessor properties with attributes {[[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true}.
 
-### get input
+### get RegExp.input
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
-### get $_
+### get RegExp.$_
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
-### get lastMatch
+### get RegExp.lastMatch
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
-### get $&
+### get RegExp.$&
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
-### get lastParen
+### get RegExp.lastParen
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
-### get $+
+### get RegExp.$+
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
-### get leftContext
+### get RegExp.leftContext
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
-### get $`
+### get RegExp.$`
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
-### get rightContext
+### get RegExp.rightContext
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
-### get $'
+### get RegExp.$'
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
-### get $1
+### get RegExp.$1
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen1]] internal slot.
 
-### get $2
+### get RegExp.$2
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen2]] internal slot.
 
-### get $3
+### get RegExp.$3
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen3]] internal slot.
 
-### get $4
+### get RegExp.$4
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen4]] internal slot.
 
-### get $5
+### get RegExp.$5
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen5]] internal slot.
 
-### get $6
+### get RegExp.$6
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen6]] internal slot.
 
-### get $7
+### get RegExp.$7
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen7]] internal slot.
 
-### get $8
+### get RegExp.$8
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen8]] internal slot.
 
-### get $9
+### get RegExp.$9
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen9]] internal slot.
 
 
-Modification of [RegExp.prototype.compile ( _pattern_, _flags_ )](http://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
-================================================
+## [RegExp.prototype.compile ( _pattern_, _flags_ )](http://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
 
 The modification below will disable RegExp.prototype.compile for objects that are not direct instances of RegExp.
 
