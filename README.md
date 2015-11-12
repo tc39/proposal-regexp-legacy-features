@@ -60,7 +60,7 @@ In the RegExpBuiltInExec abstract operation, a hook is added for updating the st
     1. ...
     1. Perform CreateDataProperty(_A_, ToString(_i_) , _capturedValue_).
     1. **Append _capturedValue_ to the end of _capturedValues_.** 
-1. **Let _OriginalConstructor_ be the value of _R_’s [[LegacyConstructor]] internal slot.**
+1. **Let _OriginalConstructor_ be the value of _R_’s [[OriginalConstructor]] internal slot.**
 1. **If SameValue(_OriginalConstructor_, %RegExp%) is true, then**
     1. **Perform UpdateLegacyRegExpStaticProperties(_OriginalConstructor_, _S_, _lastIndex_, _e_, _capturedValues_).**
 1. Return _A_.
