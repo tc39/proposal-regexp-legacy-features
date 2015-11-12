@@ -40,7 +40,7 @@ The initial value of all these internal slots is the empty String.
 
 ## [RegExpAlloc ( _newTarget_ )](http://tc39.github.io/ecma262/#sec-regexpalloc)
 
-RegExp instances have an additional slot, which optionally points to the object whose static properties should be updated after a successful match, namely %RegExp%. The RegExpAlloc abstract operation is modified as follows:
+RegExp instances have an additional slot which keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
 1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[OriginalConstructor]]**»).
 1. **Set the value of _obj_'s [[OriginalConstructor]] internal slot to _newTarget_.**
