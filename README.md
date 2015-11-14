@@ -92,102 +92,154 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
     
 ## Additional properties of the RegExp constructor
 
-All the below properties are accessor properties with attributes {[[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true}.
+All the below properties are configurable accessor properties; some of them are enumerable, others are not.
 
-### get RegExp.input
+### RegExp.input
+#### get RegExp.input
+
+1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
+1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
+
+#### set RegExp.input = _val_ 
+
+1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
+1. Let _strVal_ be ? ToString(_val_).
+1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
+
+This property has the attributes { [[Enumerable]]: true, [[Configurable]]: true }.
+
+### RegExp.$_
+#### get RegExp.$_
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
-### get RegExp.$_
+#### set RegExp.$_ =  _val_ 
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
-1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
+1. Let _strVal_ be ? ToString(_val_).
+1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
+
+This property has the attributes { [[Enumerable]]: false, [[Configurable]]: true }.
 
 ### get RegExp.lastMatch
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$&
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true }.
 
 ### get RegExp.lastParen
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$+
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true }.
 
 ### get RegExp.leftContext
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$`
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true }.
 
 ### get RegExp.rightContext
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$'
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: false, [[Configurable]]: true }.
 
 ### get RegExp.$1
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen1]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$2
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen2]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
 
 ### get RegExp.$3
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen3]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$4
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen4]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
 
 ### get RegExp.$5
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen5]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$6
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen6]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
 
 ### get RegExp.$7
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen7]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$8
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen8]] internal slot.
 
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
+
 ### get RegExp.$9
 
 1. If SameValue(this value, %RegExp%) is false, throw a TypeError.
 1. Return the value of %RegExp%’s [[RegExpParen9]] internal slot.
+
+This property has the attributes { [[Set]]: undefined, [[Enumerable]]: true, [[Configurable]]: true }.
 
 
 ## [RegExp.prototype.compile ( _pattern_, _flags_ )](http://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
