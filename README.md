@@ -43,10 +43,13 @@ The initial value of all these internal slots is the empty String.
 
 ## [RegExpAlloc ( _newTarget_ )](http://tc39.github.io/ecma262/#sec-regexpalloc)
 
-RegExp instances have an additional slot which keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
+RegExp instances have an additional slot which optionally keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
-1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[OriginalConstructor]]**»).
-1. **Set the value of _obj_'s [[OriginalConstructor]] internal slot to _newTarget_.**
+1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[LegacyRegExpConstructor]]**»).
+1. **If _newTarget_ is an Object that has a [[RegExpInput]] internal slot, then**
+    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _newTarget_.**
+1. **Else,**
+    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _undefined_.**
 2. Let _status_ be DefinePropertyOrThrow(_obj_, "lastIndex", PropertyDescriptor {[[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false}).
 3. Assert: _status_ is not an abrupt completion.
 4. Return _obj_.
@@ -63,9 +66,9 @@ In the RegExpBuiltInExec abstract operation, a hook is added for updating the st
     1. ...
     1. Perform CreateDataProperty(_A_, ToString(_i_) , _capturedValue_).
     1. **Append _capturedValue_ to the end of _capturedValues_.** 
-1. **Let _OriginalConstructor_ be the value of _R_’s [[OriginalConstructor]] internal slot.**
-1. **If SameValue(_OriginalConstructor_, %RegExp%) is true, then**
-    1. **Perform UpdateLegacyRegExpStaticProperties(_OriginalConstructor_, _S_, _lastIndex_, _e_, _capturedValues_).**
+1. **Let _LegacyRegExpConstructor_ be the value of _R_’s [[LegacyRegExpConstructor]] internal slot.**
+1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is true, then**
+    1. **Perform UpdateLegacyRegExpStaticProperties(_LegacyRegExpConstructor_, _S_, _lastIndex_, _e_, _capturedValues_).**
 1. Return _A_.
 
 
@@ -249,8 +252,8 @@ The modification below will disable RegExp.prototype.compile for objects that ar
 1. Let _O_ be the this value.
 1. If Type(_O_) is not Object or Type(_O_) is Object and _O_ does not have a [[RegExpMatcher]] internal slot, then
     1. Throw a TypeError exception.
-1. **Let _OriginalConstructor_ be the value of _O_’s [[OriginalConstructor]] internal slot.**
-1. **If SameValue(_OriginalConstructor_, %RegExp%) is false, then**
+1. **Let _LegacyRegExpConstructor_ be the value of _O_’s [[LegacyRegExpConstructor]] internal slot.**
+1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is false, then**
     1. **Throw a TypeError exception.**
 1. If Type(_pattern_) is Object and pattern has a [[RegExpMatcher]] internal slot, then
     1. If _flags_ is not undefined, throw a TypeError exception.
