@@ -39,6 +39,8 @@ Implemented at least by Chrome.
 
 These features may need to be discussed and gain consensus.
 
+For more detailed motivations, see [subclass-restriction-motivation.md](subclass-restriction-motivation.md)
+
 ## All nonstandard legacy features of RegExp (i.e., static properties of RegExp as well as RegExp#compile) are disabled for cross-realm calls
 
 where “cross-realm calls” mean things such as:
@@ -55,4 +57,23 @@ Currently, Firefox and Chrome have divergent semantics in that situation.
 ## All nonstandard legacy features of RegExp are disabled for proper subsclasses of RegExp
 
 In short, if the subclass does non-trivial transformations, the legacy features, as currently implemented, have good chances not to work as expected.
+
+## Backward compatibility consideration
+
+We do not expect that the introduction these restrictions will cause much havoc beyond test suites, given that true subclasses of RegExp are not yet common (to say the least!), and that the cross-realm issue is quite obscure.
+
+However, as currently specced, the risk of breakage isn’t nonexistent. Suppose that the RegExp constructor is replaced by a user-defined one using the following pattern:
+
+```js
+var OriginalRegExp = RegExp
+RegExp = function(/* ... */) { /* ... */ }
+RegExp.prototype = new OriginalRegExp
+RegExp.__proto__ = OriginalRegExp
+```
+
+Then, expressions like `RegExp.rightContext` that used to work as expected in implementations that support prototype mutation via \_\_proto\_\_, will now throw a TypeError.
+
+In case it is an issue, we may just remove the first step in the relevant algorithm:
+
+1. <del>If SameValue(this value, %RegExp%) is false, throw a TypeError.</del>
 
