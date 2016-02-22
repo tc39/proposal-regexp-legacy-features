@@ -9,7 +9,7 @@ This does not reflect what the implementations do, but what the editor thinks to
 
 The proposal includes another feature that needs consensus and implementation experience before being specced:
 
-* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp (and anecdotically for cross-realm regexpes). [See the detailed motivation here.](subclass-restriction-motivation.md)
+* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp as well as for cross-realm regexpes. [See the detailed motivation here.](subclass-restriction-motivation.md)
  
 See also [the differences between this spec and the current implementations](changes.md).
 
