@@ -8,9 +8,9 @@ Among the different variations between implementations, we have chosen what we t
 
 ## The legacy static properties of RegExp are accessors
 
-Because it is more natural to spec that way, and because it reflects better the changing nature of those properties.
+Because it is more natural to spec that way especially if we want to make them deletable, and because it reflects better the changing nature of those properties.
 
-Implemented at least by Firefox and Chrome.
+Implemented by Firefox and Chrome.
 
 ## The legacy static properties of RegExp have no setter, except for RegExp.input and its alias RegExp.$_
 
@@ -18,22 +18,21 @@ As a consequence, `RegExp.$1 = val` fails silently in slopply mode but loudly in
 
 Because loud failure is easier to debug.
 
-Implemented at least by Firefox.
+Implemented by Firefox. Functionaly equivalent semantics (nonwritable properties) implemented by Safari.
 
-## The legacy static properties of RegExp are configurable/deletable
+## The legacy static properties of RegExp are configurable and deletable
 
 So that the associated features may be easily removed by deleting the associated API.
 
 This is important for secured environments that want to remove global communication channels.
 
-Implemented at least by Chrome.
+Implemented by Chrome.
 
 ## The legacy static properties of RegExp should be nonenumerable
 
 Just for consistency with the rest of ECMA262.
 
-Implemented at least by Chrome.
-
+Implemented by Chrome.
 
 # Features that are currently not implemented in any mainstream web browser
 
@@ -57,4 +56,21 @@ Currently, Firefox and Chrome have divergent semantics in that situation.
 ## All nonstandard legacy features of RegExp are disabled for proper subsclasses of RegExp
 
 In short, if the subclass does non-trivial transformations, the legacy features, as currently implemented, have good chances not to work as expected.
+
+
+# Features not described here and implemented by some browsers only
+
+Those features are considered as not needed for web compatibility and therefore are not part of the proposal.
+
+## RegExp.index, RegExp.lastIndex
+
+Respectively the start and the end position in the string of the last succesful match.
+
+Implemented by Edge.
+
+## RegExp.multiline, RegExp.$*
+
+A boolean flag that, when set to true, forces new regexps to have the multiline flag.
+
+Implemented by Firefox. The property is present in Safari but is nonfunctional.
 
