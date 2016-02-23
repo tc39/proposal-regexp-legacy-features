@@ -1,6 +1,6 @@
 This document aims to describe the main differences between what is described in this repository and what current browsers implement.
 
-This document is most probably incomplete.
+This document is probably incomplete.
 
 # Features that are implemented in at least one mainstream web browser, but not in all
 
@@ -73,4 +73,14 @@ Implemented by Edge.
 A boolean flag that, when set to true, forces new regexps to have the multiline flag.
 
 Implemented by Firefox. The property is present in Safari but is nonfunctional.
+
+## Miscellaneous
+
+* At least Firefox (until v44) has a mechanism to restore previous values of RegExp static properties in some situations.
+* For some methods (e.g., String#split), the RegExp static properties are typically not updated.
+* For some methods (e.g., String#replace used with a callback), the moment when the RegExp static properties are updated is observably different accross implementations.
+
+See [bugzilla@mozilla bug:1208835#c1](https://bugzilla.mozilla.org/show_bug.cgi?id=1208835#c1) for a testcase illustrating the behaviour of different implementations w.r.t. RegExp#replace. (For this particular testcase, our proposal will lead to the same result as Chrome and Safari.)
+
+We have preferred to keep the spec simple rather than trying to be smart or to mimic some implementation: that is to say, we have just specified what is observable for RegExp#exec; and for other methods working with regexps we have relied on the fact that they are specified in terms of RegExp#exec since ES 2015.
 
