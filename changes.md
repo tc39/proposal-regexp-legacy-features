@@ -76,7 +76,7 @@ Implemented by Firefox. The property is present in Safari but is nonfunctional.
 
 ## Miscellaneous
 
-* At least Firefox (until v44) has a mechanism to restore previous values of RegExp static properties in some situations.
+* Old versions of Firefox (until v44) had a mechanism to restore previous values of RegExp static properties in some situations.
 * For some methods (e.g., String#split), the RegExp static properties are typically not updated.
 * For some methods (e.g., String#replace used with a callback), the moment when the RegExp static properties are updated is observably different accross implementations.
 
