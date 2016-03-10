@@ -4,11 +4,25 @@ Because they may not do what you want.
 
 Suppose you write a subclass of RegExp that allows to apply a regular expression simultaneously (to be more correct: successively) to each elements of an array of strings. Then, the RegExp static properties will likely give information about the match against the last string only, which is probably not what is intended.
 
+Another issue with those static properties is the lack of encapsulation. For example, suppose that we evaluate the three following expressions in order:
+
+```js
+/(a)/.exec('a')
+Object.keys(bar)
+RegExp.$1
+```
+
+Suppose now that you are running in an environment incorporating a polyfill that emulates symbols using strings of shape `/^symbol-[0-9]{20}-/`; that polyfill could monkey-patch `Object.keys` in order to filter out strings that are of the form of emulated symbols. Then, `RegExp.$1` will likely leak implementation details from that polyfill instead of returning the desired result.
+
+Although that problem is not specific to proper subclasses of RegExp, it may become worse, because the offending expression could be hidden in the implementation of the subclass, e.g., in an `exec()` or `@@replace()` method of the subclass.
+
+
 ## Why disable RegExp.prototype.compile() for proper subclasses of RegExp?
 
 Because they may not do what you want.
 
 Suppose you have a subclass of RegExp that supports the `x` flag. Likely, the constructor will rewrite the provided pattern by removing spaces and comments, and forward the modified pattern to the base constructor. However, as currently specified, the `.compile()` method will not give the opportunity to rewrite its provided pattern, as it will not call the constructor. Since it is a nonstandard and deprecated feature, attempting to fix it properly is not worth the trouble.
+
 
 ## Why disable those features for cross-realm regexps
 
