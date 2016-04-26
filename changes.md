@@ -14,7 +14,7 @@ Implemented by Firefox and Chrome.
 
 ## The legacy static properties of RegExp have no setter, except for RegExp.input and its alias RegExp.$_
 
-As a consequence, `RegExp.$1 = val` fails silently in slopply mode but loudly in strict mode.
+As a consequence, `RegExp.$1 = val` fails silently in sloppy mode but loudly in strict mode.
 
 Because loud failure is easier to debug.
 
@@ -49,7 +49,7 @@ where “cross-realm calls” mean things such as:
 
 So that realms do not pollute each others. Or, so that if those features are removed in one realm using `delete RegExp.$1`, etc., they are *really* removed for that realm.
 
-Note that this is a corner case; in particular, it does *not* concern `otherRealm_regexp.compile()`, because the `compile` method is in the same realm as `otherRealm_regexp`.
+Note that this is a corner case; in particular, it does *not* concern `otherRealm_regexp.compile()`, because the `compile` method is from the same realm as `otherRealm_regexp`.
 
 Currently, Firefox and Chrome have divergent semantics in that situation.
 
@@ -72,7 +72,7 @@ Implemented by Edge.
 
 A boolean flag that, when set to true, forces new regexps to have the multiline flag.
 
-Implemented by Firefox. The property is present in Safari but is nonfunctional.
+Implemented by Firefox, but intended to be removed in v48. The property is present in Safari but is nonfunctional.
 
 ## Miscellaneous
 
