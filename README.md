@@ -16,12 +16,12 @@ See also [the differences between this spec and the current implementations](cha
 
 ----
 
-The amendments are relative to the last ECMAScript specification draft found at: http://tc39.github.io/ecma262/
+The amendments are relative to the last ECMAScript specification draft found at: https://tc39.github.io/ecma262/
 Changes relative to existing algorithms  are marked in **bold**.
 
 All the amendments are part of Annex B, including those that modify objects or algorithm defined in other parts of the spec.
 
-## [%RegExp%](http://tc39.github.io/ecma262/#sec-regexp-constructor)
+## [%RegExp%](https://tc39.github.io/ecma262/#sec-regexp-constructor)
 
 The %RegExp% instrinsic object, which is the builtin RegExp constructor, has the following additional internal slots:
 
@@ -43,7 +43,7 @@ The %RegExp% instrinsic object, which is the builtin RegExp constructor, has the
 The initial value of all these internal slots is the empty String.
 
 
-## [RegExpAlloc ( _newTarget_ )](http://tc39.github.io/ecma262/#sec-regexpalloc)
+## [RegExpAlloc ( _newTarget_ )](https://tc39.github.io/ecma262/#sec-regexpalloc)
 
 RegExp instances have an additional slot which optionally keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
@@ -52,28 +52,27 @@ RegExp instances have an additional slot which optionally keeps a reference to i
     1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _newTarget_.**
 1. **Else,**
     1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _undefined_.**
-2. Let _status_ be DefinePropertyOrThrow(_obj_, "lastIndex", PropertyDescriptor {[[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false}).
-3. Assert: _status_ is not an abrupt completion.
-4. Return _obj_.
+1. Perform ! DefinePropertyOrThrow(_obj_, "lastIndex", PropertyDescriptor {[[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false}).
+1. Return _obj_.
 
 
-## [RegExpBuiltInExec ( _R_, _S_ )](http://tc39.github.io/ecma262/#sec-regexpbuiltinexec)
+## [RegExpBuiltInExec ( _R_, _S_ )](https://tc39.github.io/ecma262/#sec-regexpbuiltinexec)
 
 In the RegExpBuiltInExec abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The last three steps of the algorithm are modified as follows:
 
 1. ...
-1. Perform CreateDataProperty(_A_, "0", _matchedSubstr_).
+1. (current step 23) Perform ! CreateDataProperty(_A_, "0", _matchedSubstr_).
 1. **Let _capturedValues_ be an new empty List.**
-1. For each integer _i_ such that _i_ > 0 and _i_ ≤ _n_
+1. (current step 24) For each integer _i_ such that _i_ > 0 and _i_ ≤ _n_
     1. ...
-    1. Perform CreateDataProperty(_A_, ToString(_i_) , _capturedValue_).
+    1. (current step 24.e) Perform ! CreateDataProperty(_A_, ToString(_i_) , _capturedValue_).
     1. **Append _capturedValue_ to the end of _capturedValues_.** 
 1. **Let _LegacyRegExpConstructor_ be the value of _R_’s [[LegacyRegExpConstructor]] internal slot.**
 1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is true, then**
     1. **Perform UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).**
 1. **Else,**
     1. **Perform InvalidateLegacyRegExpStaticProperties(%RegExp%).**
-1. Return _A_.
+1. (current step 25) Return _A_.
 
 
 ## UpdateLegacyRegExpStaticProperties ( _C_, _S_, _startIndex_, _endIndex_, _capturedValues_ )
@@ -101,6 +100,9 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
 
 The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.
 
+_**Open issue.** It is probably more prudent to use the empty String instead of **empty**. See [Isssue #6](/claudepache/es-regexp-legacy-static-properties/issues/6). (In that case, the special treatment for the **empty** value in the algorithms of the next section will be removed as well.)_
+
+
 1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
 1. Set the value of _C_’s [[RegExpInput]] internal slot to **empty**.
 1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to **empty**.
@@ -121,6 +123,7 @@ The abstract operation InvalidateLegacyRegExpStaticProperties marks the values o
 ## Additional properties of the RegExp constructor
 
 All the below properties have the attributes { [[Enumerable]]: false, [[Configurable]]: true }. Moreover, for the properties whose setter is not explicitely defined, the [[Set]] attribute is set to undefined.
+
 
 ### RegExp.input
 #### get RegExp.input
@@ -252,9 +255,9 @@ All the below properties have the attributes { [[Enumerable]]: false, [[Configur
 1. Return _v_.
 
 
-## [RegExp.prototype.compile ( _pattern_, _flags_ )](http://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
+## [RegExp.prototype.compile ( _pattern_, _flags_ )](https://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
 
-The modification below will disable RegExp.prototype.compile for objects that are not direct instances of RegExp.
+The modification below will disable RegExp.prototype.compile for objects that are not direct instances of RegExp as well as in case of mismatch between realms.
 
 1. Let _O_ be the this value.
 1. If Type(_O_) is not Object or Type(_O_) is Object and _O_ does not have a [[RegExpMatcher]] internal slot, then
@@ -269,5 +272,5 @@ The modification below will disable RegExp.prototype.compile for objects that ar
 1. Else,
     1. Let _P_ be pattern.
     1. Let _F_ be flags.
-1. Return RegExpInitialize(_O_, _P_, _F_).
+1. Return ? RegExpInitialize(_O_, _P_, _F_).
 
