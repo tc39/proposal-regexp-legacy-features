@@ -100,7 +100,7 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
 
 The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.
 
-_**Open issue.** It is probably more prudent to use the empty String instead of **empty**. See [Isssue #6](/claudepache/es-regexp-legacy-static-properties/issues/6). (In that case, the special treatment for the **empty** value in the algorithms of the next section will be removed as well.)_
+_**Open issue.** It is probably more prudent to use the empty String instead of **empty**. See [Issue #6](https://github.com/claudepache/es-regexp-legacy-static-properties/issues/6). (In that case, the special treatment for the **empty** value in the algorithms of the next section will be removed as well.)_
 
 
 1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
