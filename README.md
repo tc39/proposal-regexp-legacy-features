@@ -9,7 +9,7 @@ This does not reflect what the implementations do, but what the editor thinks to
 
 The proposal includes another feature that needs consensus and implementation experience before being specced:
 
-* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp as well as for cross-realm regexpes. [See the detailed motivation here.](subclass-restriction-motivation.md)
+* RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp as well as for cross-realm regexps. [See the detailed motivation here.](subclass-restriction-motivation.md)
  
 See also [the differences between this spec and the current implementations](changes.md).
 
@@ -48,10 +48,11 @@ The initial value of all these internal slots is the empty String.
 RegExp instances have an additional slot which optionally keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
 1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[LegacyRegExpConstructor]]**»).
-1. **If _newTarget_ is an Object that has a [[RegExpInput]] internal slot, then**
+1. **Let _thisRealm_ be the current Realm Record.**
+1. **If SameValue(_newTarget_, _thisRealm_.[[Intrinsics]].[[%RegExp%]]) is true, then**
     1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _newTarget_.**
 1. **Else,**
-    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _undefined_.**
+    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to undefined.**
 1. Perform ! DefinePropertyOrThrow(_obj_, "lastIndex", PropertyDescriptor {[[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false}).
 1. Return _obj_.
 
