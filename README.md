@@ -70,9 +70,12 @@ In the RegExpBuiltInExec abstract operation, a hook is added for updating the st
 1. **Let _LegacyRegExpConstructor_ be the value of _R_’s [[LegacyRegExpConstructor]] internal slot.**
 1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is true, then**
     1. **Perform UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).**
+1. (current step 25) Return _A_.
+
+<!--
 1. **Else,**
     1. **Perform InvalidateLegacyRegExpStaticProperties(%RegExp%).**
-1. (current step 25) Return _A_.
+-->
 
 
 ## UpdateLegacyRegExpStaticProperties ( _C_, _S_, _startIndex_, _endIndex_, _capturedValues_ )
@@ -95,45 +98,45 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
     1. If _i_ ≤ _n_, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the <i>i</i>th element of _capturedValues_.
     1. Else, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the empty String.
 
-
+<!--
 ## InvalidateLegacyRegExpStaticProperties ( _C_)
 
 The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.
 
-_**Open issue.** It is probably more prudent to use the empty String instead of **empty**. See [Issue #6](https://github.com/claudepache/es-regexp-legacy-static-properties/issues/6). (In that case, the special treatment for the **empty** value in the algorithms of the next section will be removed as well.)_
-
 
 1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
-1. Set the value of _C_’s [[RegExpInput]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpLastParen]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpLeftContext]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpRightContext]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen1]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen2]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen3]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen4]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen5]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen6]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen7]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen8]] internal slot to **empty**.
-1. Set the value of _C_’s [[RegExpParen9]] internal slot to **empty**.
-
+1. Set the value of _C_’s [[RegExpInput]] internal slot to the empty String.
+1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpLastParen]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpLeftContext]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpRightContext]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen1]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen2]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen3]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen4]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen5]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen6]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen7]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen8]] internal slot to empty String.
+1. Set the value of _C_’s [[RegExpParen9]] internal slot to empty String.
+-->
 
 ## Additional properties of the RegExp constructor
 
-All the below properties have the attributes { [[Enumerable]]: false, [[Configurable]]: true }. Moreover, for the properties whose setter is not explicitely defined, the [[Set]] attribute is set to undefined.
+All the below properties are accessor properties who have the attributes { [[Enumerable]]: false, [[Configurable]]: true }. Moreover, for the properties whose setter is not explicitely defined, the [[Set]] attribute is set to undefined.
+
+The accessors check for their this value, so that the properties do not appear to be inherited by subclasses.
 
 
 ### RegExp.input
 #### get RegExp.input
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpInput]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
 #### set RegExp.input = _val_ 
 
+1. If SameValue(%RegExp%, this value) is false, throw a TypeError Exception.
 1. Let _strVal_ be ? ToString(_val_).
 1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
 
@@ -141,118 +144,101 @@ All the below properties have the attributes { [[Enumerable]]: false, [[Configur
 ### RegExp.$_
 #### get RegExp.$_
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpInput]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
 
 #### set RegExp.$_ =  _val_ 
 
+1. If SameValue(%RegExp%, this value) is false, throw a TypeError Exception.
 1. Let _strVal_ be ? ToString(_val_).
 1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
 
 
 ### get RegExp.lastMatch
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
 ### get RegExp.$&
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
 
 ### get RegExp.lastParen
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLastParen]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
 ### get RegExp.$+
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLastParen]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
 
 ### get RegExp.leftContext
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
 ### get RegExp.$`
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
 
 ### get RegExp.rightContext
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpRightContext]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
 
 ### get RegExp.$'
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpRightContext]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
 
 ### get RegExp.$1
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen1]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen1]] internal slot.
 
 ### get RegExp.$2
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen2]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen2]] internal slot.
 
 ### get RegExp.$3
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen3]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen3]] internal slot.
 
 ### get RegExp.$4
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen4]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen4]] internal slot.
 
 ### get RegExp.$5
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen5]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen5]] internal slot.
 
 ### get RegExp.$6
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen6]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen6]] internal slot.
 
 ### get RegExp.$7
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen7]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen7]] internal slot.
 
 ### get RegExp.$8
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen8]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen8]] internal slot.
 
 ### get RegExp.$9
 
-1. Let _v_ be the value of %RegExp%’s [[RegExpParen9]] internal slot.
-1. If _v_ is **empty**, throw a **TypeError** exception.
-1. Return _v_.
+1. If SameValue(%RegExp%, this value) is false, return undefined.
+1. Return the value of %RegExp%’s [[RegExpParen9]] internal slot.
 
 
 ## [RegExp.prototype.compile ( _pattern_, _flags_ )](https://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
