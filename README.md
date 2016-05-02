@@ -71,12 +71,9 @@ In the RegExpBuiltInExec abstract operation, a hook is added for updating the st
 1. **Let _LegacyRegExpConstructor_ be the value of _R_’s [[LegacyRegExpConstructor]] internal slot.**
 1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is true, then**
     1. **Perform UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).**
-1. (current step 25) Return _A_.
-
-<!--
 1. **Else,**
     1. **Perform InvalidateLegacyRegExpStaticProperties(%RegExp%).**
--->
+1. (current step 25) Return _A_.
 
 
 ## UpdateLegacyRegExpStaticProperties ( _C_, _S_, _startIndex_, _endIndex_, _capturedValues_ )
@@ -99,13 +96,12 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
     1. If _i_ ≤ _n_, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the <i>i</i>th element of _capturedValues_.
     1. Else, set the value of _C_’s [[RegExpParen<i>i</i>]] internal slot to the empty String.
 
-<!--
 ## InvalidateLegacyRegExpStaticProperties ( _C_)
 
 The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.
 
 1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
-1. Set the value of the following internal slots of _C_ to the empty String.
+1. Set the value of the following internal slots of _C_ to **empty**:
   * [[RegExpInput]]
   * [[RegExpLastMatch]]
   * [[RegExpLastParen]]
@@ -120,7 +116,6 @@ The abstract operation InvalidateLegacyRegExpStaticProperties marks the values o
   * [[RegExpParen7]]
   * [[RegExpParen8]]
   * [[RegExpParen9]]
--->
 
 ## Additional properties of the RegExp constructor
 
@@ -134,8 +129,10 @@ The accessors check for their this value, so that the properties do not appear t
 The abstract operation GetLegacyRegExpStaticProperty is used when retrieving a value from a legacy RegExp static property.
 
 1. Assert _C_ is an object that has an internal slot named _internalSlotName_.
-2. If SameValue(_C_, _thisValue_) is false, return undefined.
-3. Return the value of the internal slot of _C_ named _internalSlotName_.
+2. If SameValue(_C_, _thisValue_) is false, throw a TypeError exception.
+3. Let _val_ be the value of the internal slot of _C_ named _internalSlotName_.
+4. If _val_ is **empty**, throw a TypeError exception.
+3. Return _val_.
 
 #### SetLegacyRegExpStaticProperty( _C_, _thisValue_, _internalSlotName_, _val_ ).
 The abstract operation SetLegacyRegExpStaticProperty is used when assigning a value to a legacy RegExp static property.
@@ -148,7 +145,7 @@ The abstract operation SetLegacyRegExpStaticProperty is used when assigning a va
 ### RegExp.input
 #### get RegExp.input
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
 
 #### set RegExp.input = _val_ 
 
@@ -157,7 +154,7 @@ The abstract operation SetLegacyRegExpStaticProperty is used when assigning a va
 ### RegExp.$_
 #### get RegExp.$_
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
 
 #### set RegExp.$_ =  _val_ 
 
@@ -166,71 +163,71 @@ The abstract operation SetLegacyRegExpStaticProperty is used when assigning a va
 
 ### get RegExp.lastMatch
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
 
 ### get RegExp.$&
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
 
 ### get RegExp.lastParen
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
 
 ### get RegExp.$+
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
 
 ### get RegExp.leftContext
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
 
 ### get RegExp.$`
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
 
 ### get RegExp.rightContext
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
 
 ### get RegExp.$'
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
 
 ### get RegExp.$1
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen1]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen1]]).
 
 ### get RegExp.$2
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen2]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen2]]).
 
 ### get RegExp.$3
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen3]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen3]]).
 
 ### get RegExp.$4
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen4]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen4]]).
 
 ### get RegExp.$5
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen5]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen5]]).
 
 ### get RegExp.$6
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen6]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen6]]).
 
 ### get RegExp.$7
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen7]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen7]]).
 
 ### get RegExp.$8
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen8]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen8]]).
 
 ### get RegExp.$9
 
-1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen9]]).
+1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen9]]).
 
 
 ## [RegExp.prototype.compile ( _pattern_, _flags_ )](https://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
