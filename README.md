@@ -104,22 +104,22 @@ The abstract operation UpdateLegacyRegExpStaticProperties updates the values of 
 
 The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.
 
-
 1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
-1. Set the value of _C_’s [[RegExpInput]] internal slot to the empty String.
-1. Set the value of _C_’s [[RegExpLastMatch]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpLastParen]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpLeftContext]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpRightContext]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen1]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen2]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen3]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen4]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen5]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen6]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen7]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen8]] internal slot to empty String.
-1. Set the value of _C_’s [[RegExpParen9]] internal slot to empty String.
+1. Set the value of the following internal slots of _C_ to the empty String.
+  * [[RegExpInput]]
+  * [[RegExpLastMatch]]
+  * [[RegExpLastParen]]
+  * [[RegExpLeftContext]]
+  * [[RegExpRightContext]]
+  * [[RegExpParen1]]
+  * [[RegExpParen2]]
+  * [[RegExpParen3]]
+  * [[RegExpParen4]]
+  * [[RegExpParen5]]
+  * [[RegExpParen6]]
+  * [[RegExpParen7]]
+  * [[RegExpParen8]]
+  * [[RegExpParen9]]
 -->
 
 ## Additional properties of the RegExp constructor
@@ -128,118 +128,109 @@ All the below properties are accessor properties who have the attributes { [[Enu
 
 The accessors check for their this value, so that the properties do not appear to be inherited by subclasses.
 
+### Abstract operations
+
+#### GetLegacyRegExpStaticProperty( _C_, _thisValue_, _internalSlotName_ ).
+The abstract operation GetLegacyRegExpStaticProperty is used when retrieving a value from a legacy RegExp static property.
+
+1. Assert _C_ is an object that has an internal slot named _internalSlotName_.
+2. If SameValue(_C_, _thisValue_) is false, return undefined.
+3. Return the value of the internal slot of _C_ named _internalSlotName_.
+
+#### SetLegacyRegExpStaticProperty( _C_, _thisValue_, _internalSlotName_, _val_ ).
+The abstract operation SetLegacyRegExpStaticProperty is used when assigning a value to a legacy RegExp static property.
+
+1. Assert _C_ is an object that has an internal slot named _internalSlotName_.
+2. If SameValue(_C_, _thisValue_) is false, throw a TypeError exception.
+3. Let _strVal_ be ? ToString(_val_).
+4. Set the value of the internal slot of _C_ named _internalSlotName_ to _strVal_.
 
 ### RegExp.input
 #### get RegExp.input
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
 
 #### set RegExp.input = _val_ 
 
-1. If SameValue(%RegExp%, this value) is false, throw a TypeError Exception.
-1. Let _strVal_ be ? ToString(_val_).
-1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
-
+1. Perform ? SetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]], _val_).
 
 ### RegExp.$_
 #### get RegExp.$_
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpInput]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]]).
 
 #### set RegExp.$_ =  _val_ 
 
-1. If SameValue(%RegExp%, this value) is false, throw a TypeError Exception.
-1. Let _strVal_ be ? ToString(_val_).
-1. Set the value of %RegExp%’s [[RegExpInput]] internal slot to _strVal_.
+1. Perform ? SetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpInput]], _val_).
 
 
 ### get RegExp.lastMatch
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
 
 ### get RegExp.$&
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLastMatch]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastMatch]]).
 
 ### get RegExp.lastParen
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
 
 ### get RegExp.$+
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLastParen]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLastParen]]).
 
 ### get RegExp.leftContext
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
 
 ### get RegExp.$`
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpLeftContext]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpLeftContext]]).
 
 ### get RegExp.rightContext
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
-
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
 
 ### get RegExp.$'
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpRightContext]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpRightContext]]).
 
 ### get RegExp.$1
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen1]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen1]]).
 
 ### get RegExp.$2
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen2]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen2]]).
 
 ### get RegExp.$3
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen3]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen3]]).
 
 ### get RegExp.$4
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen4]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen4]]).
 
 ### get RegExp.$5
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen5]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen5]]).
 
 ### get RegExp.$6
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen6]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen6]]).
 
 ### get RegExp.$7
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen7]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen7]]).
 
 ### get RegExp.$8
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen8]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen8]]).
 
 ### get RegExp.$9
 
-1. If SameValue(%RegExp%, this value) is false, return undefined.
-1. Return the value of %RegExp%’s [[RegExpParen9]] internal slot.
+1. Return ! GetLegacyRegExpStaticProperty(%RegExp%, this value, [[RegExpParen9]]).
 
 
 ## [RegExp.prototype.compile ( _pattern_, _flags_ )](https://tc39.github.io/ecma262/#sec-regexp.prototype.compile)
