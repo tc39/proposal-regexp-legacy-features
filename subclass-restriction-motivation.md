@@ -1,10 +1,22 @@
-## Why disable legacy static properties for proper subclasses of RegExp?
+## Why disable legacy RegExp features for proper subclasses of RegExp?
 
-Because they may not do what you want.
+Basically, because it breaks encapsulation.
+
+In ES 2015 + web reality, there are three ways to interact with the internals of a regexp:
+
+1. Perform a match using the `RegExp.prototype.exec()` method. (Recall that all other methods that needs to execute a regexp are written in terms of `RegExp.prototype.exec()`);
+2. modify the regexp with the deprecated `RegExp.prototype.compile()` method;
+3. retrieve information on the result of the last successful match with the deprecated `RegExp.$1`, etc. static properties.
+ 
+A subclass of `RegExp` may want to redefine `RegExp.prototype.exec()`, without caring of the legacy features, leaving them as potentially broken.
+
+Below are concrete illustrations of what could be wrong.
+
+### Legacy static properties (RegExp.$1, etc.)
 
 Suppose you write a subclass of RegExp that allows to apply a regular expression simultaneously (to be more correct: successively) to each elements of an array of strings. Then, the RegExp static properties will likely give information about the match against the last string only, which is probably not what is intended.
 
-Another issue with those static properties is the lack of encapsulation. For example, suppose that we evaluate the three following expressions in order:
+Another issue with those static properties is their lack of encapsulation. For example, suppose that we evaluate the three following expressions in order:
 
 ```js
 /(a)/.exec('a')
@@ -17,9 +29,7 @@ Suppose now that you are running in an environment incorporating a polyfill that
 Although that problem is not specific to proper subclasses of RegExp, it may become worse, because the offending expression could be hidden in the implementation of the subclass, e.g., in an `exec()` or `@@replace()` method of the subclass.
 
 
-## Why disable RegExp.prototype.compile() for proper subclasses of RegExp?
-
-Because they may not do what you want.
+### RegExp.prototype.compile()
 
 Suppose you have a subclass of RegExp that supports the `x` flag. Likely, the constructor will rewrite the provided pattern by removing spaces and comments, and forward the modified pattern to the base constructor. However, as currently specified, the `.compile()` method will not give the opportunity to rewrite its provided pattern, as it will not call the constructor. Since it is a nonstandard and deprecated feature, attempting to fix it properly is not worth the trouble.
 
@@ -33,4 +43,4 @@ First, this is really an edge case. Code like `otherRealm_regexp.exec()` is *not
 Now, concerning the static properties of the RegExp constructor: The constructor of which realm should be affected? The realm of the regexp (as thinks Firefox) or the current realm—i.e., the realm of the `.exec()` method—(as think other browsers)? Well, we don’t need to decide: the test that disables the feature for proper subclasses of RegExp will naturally disable it for RegExp objects from other realms. This has the further advantage to prevent different realms from polluting each other.
 
 
-For the `.compile()` method: The restriction enables to *really* protect all regexps of a given realm from tampering by doing `delete RegExp.prototype.compile`, because you couldn’t recover a working method from another realm.
+About the `.compile()` method: The restriction enables to *really* protect all regexps of a given realm from tampering by doing `delete RegExp.prototype.compile`, because you couldn’t recover a working method from another realm.
