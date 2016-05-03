@@ -1,8 +1,10 @@
-# Legacy static properties of the RegExp constructor in JavaScript
+# Legacy RegExp features in JavaScript
 
-This is a specification draft for the RegExp legacy static properties in JavaScript. See: [tc39/ecma262#137](https://github.com/tc39/ecma262/issues/137)
+This is a specification draft for the legacy (deprecated) RegExp features in JavaScript, i.e., static properties of the constructor like `RegExp.$1` as well as the `RegExp.prototype.compile` method.
 
 This does not reflect what the implementations do, but what the editor thinks to be the least bad thing they ought to do in order to maintain web compatibility.
+
+RegExp static properties (currently not part of ECMA 262,see [tc39/ecma262#137](https://github.com/tc39/ecma262/issues/137)) are specified such that:
 
 * The values returned by those properties are updated each time a successful match is done.
 * They may be deleted. (This is important for secured environments that want to avoid global side-effects.)
