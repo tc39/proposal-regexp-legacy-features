@@ -2,13 +2,17 @@
 
 Basically, because it breaks encapsulation.
 
-In ES 2015 + web reality, there are three ways to interact with the internals of a regexp:
+In ES 2015 + web reality, there are two ways to set the semantics of a regexp:
 
-1. Perform a match using the `RegExp.prototype.exec()` method. (Recall that all other methods that needs to execute a regexp are written in terms of `RegExp.prototype.exec()`);
-2. modify the regexp with the deprecated `RegExp.prototype.compile()` method;
-3. retrieve information on the result of the last successful match with the deprecated `RegExp.$1`, etc. static properties.
+1. using the constructor (at construction time);
+2. using the deprecated `RegExp.prototype.compile()` method.
+
+Similarly, there are two ways to get information about a successful match:
+
+1. reading the returned value of the `RegExp.prototype.exec()` method. (Recall that all other methods that needs to execute a regexp are written in terms of `RegExp.prototype.exec()`);
+2. reading the deprecated `RegExp.$1`, etc. static properties.
  
-A subclass of `RegExp` may want to redefine `RegExp.prototype.exec()`, without caring of the legacy features, leaving them as potentially broken.
+A subclass of `RegExp` may want to redefine the constructor and the `exec()` method, without caring about the legacy features, leaving them as potentially broken.
 
 Below are concrete illustrations of what could be wrong.
 
