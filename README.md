@@ -12,6 +12,8 @@ RegExp static properties (currently not part of ECMA 262,see [tc39/ecma262#137](
 The proposal includes another feature that needs consensus and implementation experience before being specced:
 
 * RegExp legacy static properties as well as RegExp.prototype.compile are disabled for instances of proper subclasses of RegExp as well as for cross-realm regexps. [See the detailed motivation here.](subclass-restriction-motivation.md)
+
+We have attempted to [identify potential risks](web-breaking-hazards.md) induced by the the backward-compatibility break introduced by that feature.
  
 See also [the differences between this spec and the current implementations](changes.md).
 
