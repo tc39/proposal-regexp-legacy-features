@@ -88,6 +88,8 @@ RegExp.__proto__ = originalRegExp; // so that RegExp.$1 is expected to continue 
 
 It is the only identified risk that the author of the proposal judges as somewhat serious.
 
+A reasonable use case of the above pattern would be as part of a polyfill for ES2015 RegExp semantics. Because latest development versions of web browsers have almost complete support of those new features, that particular case should not be an issue. 
+
 Another possible case to consider is when the getter is extracted:
 
 ```js
