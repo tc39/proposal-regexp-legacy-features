@@ -41,16 +41,16 @@ The following code will continue to work:
 var result = RegExp.prototype.exec.call(otherRealm_regexp, 'bar') // ok
 ```
 
-but the following code will fail:
+and the following code will fail:
 
 ```js
 if (RegExp.prototype.exec.call(otherRealm_regexp, 'bar')) {
-    RegExp.$1 // will throw. (Currently works on Chrome but silently fails on Firefox)
+    RegExp.$1 // will silently fail. (Currently works on Chrome but silently fails on Firefox)
     otherRealm_regexp.constructor.$1 // will silently fail. (Currently works on Firefox but silently fails on Chrome)
 }
 ```
 
-Note that the current semantics differ among browsers.
+Note that the current semantics differ among browsers, so that we remain inside intersection semantics.
 
 Also, note that this is different from the following, more likely code:
 
@@ -98,37 +98,6 @@ get$1(); // will throw
 ```
 
 But since not all mainstream browsers have yet implemented those properties as accessors, it is unlikely that it would pose problem for web compatibility.
-
-## Silent bugs and unorthodox uses that may become fatal errors
-
-Let's assume that the following rare code is run:
-
-```js
-result = RegExp.prototype.exec.call(otherRealm_regexp, 'bar'); // works as intended
-```
-
-Then, one of the following code is executed before another successful match is done:
-
-```js
-RegExp.$1 // accidentaly referring to a static property without doing a successful match
-```
-
-or:
-
-```js
-RegExp.input // lurking at the input from the last successful match
-```
-
-or:
-
-```js
-if (typeof RegExp.leftContext == 'string') // testing whether the implementation supports that feature
-```
-
-In those cases, a TypeError will be thrown, instead of producing some expected (or unexpected) result.
-
-The probability of such failure is bounded by the probabilty of cross-realm calls, that we already don’t expect to be high.
-
 
 
 
