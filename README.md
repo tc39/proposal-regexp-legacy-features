@@ -247,7 +247,7 @@ The modification below will disable RegExp.prototype.compile for objects that ar
 1. **Let _thisRealm_ be the current Realm Record.**
 1. **Let _oRealm_ be the value of _O_’s [[Realm]] internal slot.**
 1. **If SameValue(_thisRealm_, _oRealm_) is false, throw a TypeError exception.**
-1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is true, throw a TypeError exception.**
+1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is false, throw a TypeError exception.**
 1. If Type(_pattern_) is Object and _pattern_ has a [[RegExpMatcher]] internal slot, then
     1. If _flags_ is not undefined, throw a TypeError exception.
     1. Let _P_ be the value of _pattern_’s [[OriginalSource]] internal slot.
