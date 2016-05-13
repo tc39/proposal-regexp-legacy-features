@@ -248,12 +248,12 @@ The modification below will disable RegExp.prototype.compile for objects that ar
 1. **Let _oRealm_ be the value of _O_’s [[Realm]] internal slot.**
 1. **If SameValue(_thisRealm_, _oRealm_) is false, throw a TypeError exception.**
 1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is true, throw a TypeError exception.**
-1. If Type(_pattern_) is Object and pattern has a [[RegExpMatcher]] internal slot, then
+1. If Type(_pattern_) is Object and _pattern_ has a [[RegExpMatcher]] internal slot, then
     1. If _flags_ is not undefined, throw a TypeError exception.
-    1. Let _P_ be the value of patterns [[OriginalSource]] internal slot.
-    1. Let _F_ be the value of patterns [[OriginalFlags]] internal slot.
+    1. Let _P_ be the value of _pattern_’s [[OriginalSource]] internal slot.
+    1. Let _F_ be the value of _pattern_’s [[OriginalFlags]] internal slot.
 1. Else,
-    1. Let _P_ be pattern.
-    1. Let _F_ be flags.
+    1. Let _P_ be _pattern_.
+    1. Let _F_ be _flags_.
 1. Return ? RegExpInitialize(_O_, _P_, _F_).
 
