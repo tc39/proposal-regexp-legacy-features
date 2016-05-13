@@ -51,12 +51,13 @@ The initial value of all these internal slots is the empty String.
 
 RegExp instances have an additional slot which optionally keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
-1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[LegacyRegExpConstructor]]**»).
+1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[Realm]]**, **[[LegacyFeaturesEnabled]]**»).
 1. **Let _thisRealm_ be the current Realm Record.**
+1. **Set the value of _obj_’s [[Realm]] internal slot to _thisRealm_.**
 1. **If SameValue(_newTarget_, _thisRealm_.[[Intrinsics]].[[%RegExp%]]) is true, then**
-    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to _newTarget_.**
+    1. **Set the value of _obj_’s [[LegacyFeaturesEnabled]] internal slot to true.**
 1. **Else,**
-    1. **Set the value of _obj_'s [[LegacyRegExpConstructor]] internal slot to undefined.**
+    1. **Set the value of _obj_’s [[LegacyFeaturesEnabled]] internal slot to false.**
 1. Perform ! DefinePropertyOrThrow(_obj_, "lastIndex", PropertyDescriptor {[[Writable]]: true, [[Enumerable]]: false, [[Configurable]]: false}).
 1. Return _obj_.
 
@@ -72,11 +73,13 @@ In the RegExpBuiltInExec abstract operation, a hook is added for updating the st
     1. ...
     1. (current step 24.e) Perform ! CreateDataProperty(_A_, ToString(_i_) , _capturedValue_).
     1. **Append _capturedValue_ to the end of _capturedValues_.** 
-1. **Let _LegacyRegExpConstructor_ be the value of _R_’s [[LegacyRegExpConstructor]] internal slot.**
-1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is true, then**
-    1. **Perform UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).**
-1. **Else,**
-    1. **Perform InvalidateLegacyRegExpStaticProperties(%RegExp%).**
+1. **Let _thisRealm_ be the current Realm Record.**
+1. **Let _rRealm_ be the value of _R_’s [[Realm]] internal slot.**
+1. **If SameValue(_thisRealm_, _rRealm_) is true, then**
+    1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is true, then**
+        1. **Perform UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).**
+    1. **Else,**
+        1. **Perform InvalidateLegacyRegExpStaticProperties(%RegExp%).**
 1. (current step 25) Return _A_.
 
 
@@ -241,13 +244,14 @@ The modification below will disable RegExp.prototype.compile for objects that ar
 1. Let _O_ be the this value.
 1. If Type(_O_) is not Object or Type(_O_) is Object and _O_ does not have a [[RegExpMatcher]] internal slot, then
     1. Throw a TypeError exception.
-1. **Let _LegacyRegExpConstructor_ be the value of _O_’s [[LegacyRegExpConstructor]] internal slot.**
-1. **If SameValue(_LegacyRegExpConstructor_, %RegExp%) is false, then**
-    1. **Throw a TypeError exception.**
+1. **Let _thisRealm_ be the current Realm Record.**
+1. **Let _oRealm_ be the value of _O_’s [[Realm]] internal slot.**
+1. **If SameValue(_thisRealm_, _oRealm_) is false, throw a TypeError exception.**
+1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is true, throw a TypeError exception.**
 1. If Type(_pattern_) is Object and pattern has a [[RegExpMatcher]] internal slot, then
     1. If _flags_ is not undefined, throw a TypeError exception.
-    1. Let _P_ be the value of pattern's [[OriginalSource]] internal slot.
-    1. Let _F_ be the value of pattern's [[OriginalFlags]] internal slot.
+    1. Let _P_ be the value of patterns [[OriginalSource]] internal slot.
+    1. Let _F_ be the value of patterns [[OriginalFlags]] internal slot.
 1. Else,
     1. Let _P_ be pattern.
     1. Let _F_ be flags.
