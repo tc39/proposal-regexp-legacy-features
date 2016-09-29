@@ -1,5 +1,11 @@
 # Legacy RegExp features in JavaScript
 
+##Current status
+
+ECMAScript proposal at stage 2 of the process, see https://github.com/tc39/proposals
+
+## Introduction
+
 This is a specification draft for the legacy (deprecated) RegExp features in JavaScript, i.e., static properties of the constructor like `RegExp.$1` as well as the `RegExp.prototype.compile` method.
 
 This does not reflect what the implementations do, but what the editor thinks to be the least bad thing they ought to do in order to maintain web compatibility.
