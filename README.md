@@ -1,6 +1,6 @@
 # Legacy RegExp features in JavaScript
 
-##Current status
+## Current status
 
 ECMAScript proposal at stage 2 of the process, see https://github.com/tc39/proposals
 
