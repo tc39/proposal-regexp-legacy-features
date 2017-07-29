@@ -2,7 +2,7 @@
 
 ## Current status
 
-ECMAScript proposal at stage 2 of the process, see https://github.com/tc39/proposals
+ECMAScript proposal at stage 3 of the process, see https://github.com/tc39/proposals
 
 ## Introduction
 
