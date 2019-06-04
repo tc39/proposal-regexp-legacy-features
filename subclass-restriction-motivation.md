@@ -40,11 +40,11 @@ Suppose you have a subclass of RegExp that supports the `x` flag. Likely, the co
 
 ## Why disable those features for cross-realm regexps
 
-That is, if you apply `RegExp.prototype.exec()`, resepcetively `RegExp.prototype.compile()`, to a regexp constructed in another realm, then the static properties of RegExp won’t be updated, respectively a TypeError will be thrown.
+That is, if you apply `RegExp.prototype.exec()`, respectively `RegExp.prototype.compile()`, to a regexp constructed in another realm, then the static properties of RegExp won’t be updated, respectively a TypeError will be thrown.
 
 First, this is really an edge case. Code like `otherRealm_regexp.exec()` is *not* affected, because `otherRealm_regexp` is from the same realm as `otherRealm_regexp.exec`. The issue arises, e.g., in `RegExp.prototype.exec.call(otherRealm_regexp)`.
 
 Now, concerning the static properties of the RegExp constructor: The constructor of which realm should be affected? The realm of the regexp (as thinks Firefox) or the current realm—i.e., the realm of the `.exec()` method—(as think other browsers)? Well, we don’t need to decide: the test that disables the feature for proper subclasses of RegExp will naturally disable it for RegExp objects from other realms. This has the further advantage to prevent different realms from polluting each other.
 
 
-About the `.compile()` method: The restriction enables to *really* protect all regexps of a given realm from tampering by doing `delete RegExp.prototype.compile`, because you couldn’t recover a working method from another realm.
+About the `.compile()` method: The restriction enables one to *really* protect all regexps of a given realm from tampering by doing `delete RegExp.prototype.compile`, because you couldn’t recover a working method from another realm.

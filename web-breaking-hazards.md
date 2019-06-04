@@ -97,7 +97,7 @@ var get$1 = Object.getOwnPropertyDescriptor(RegExp, '$1').get;
 get$1(); // will throw
 ```
 
-But since not all mainstream browsers have yet implemented those properties as accessors, it is unlikely that it would pose problem for web compatibility.
+But since not all mainstream browsers have yet implemented those properties as accessors, it is unlikely that it would pose a problem for web compatibility.
 
 
 
