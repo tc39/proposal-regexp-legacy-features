@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "@tc39/proposal-regexp-legacy-features",
+  "description": "Legacy RegExp features in JavaScript",
+  "scripts": {
+    "start": "npm run build -- --watch",
+    "prebuild": "mkdir out || exit 0",
+    "build": "ecmarkup --verbose spec.emu out/index.html --css out/ecmarkup.css --js out/ecmarkup.js"
+  },
+  "homepage": "https://github.com/tc39/proposal-regexp-legacy-features#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tc39/proposal-regexp-legacy-features.git"
+  },
+  "license": "CC0",
+  "devDependencies": {
+    "ecmarkup": "^3.23.0"
+  }
+}
