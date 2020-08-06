@@ -1,0 +1,353 @@
+<!doctype html>
+<meta charset="utf8">
+<link rel="stylesheet" href="./ecmarkup.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/github.min.css">
+<script src="./ecmarkup.js"></script>
+<pre class="metadata">
+title: Legacy RegExp features in JavaScript
+stage: 3
+contributors: Claude Pache
+</pre>
+
+<div id="metadata-block">
+  <h1>Contributing to this Proposal</h1>
+  <p>This proposal is developed on GitHub with the help of the ECMAScript community. There are a number of ways to contribute to the development of this specification:</p>
+  <ul>
+    <li>GitHub Repository: <a href="https://github.com/tc39/proposal-regexp-legacy-features">https://github.com/tc39/proposal-regexp-legacy-features</a></li>
+    <li>Issues: <a href="https://github.com/tc39/proposal-regexp-legacy-features/issues">All Issues</a>, <a href="https://github.com/tc39/proposal-regexp-legacy-features/issues/new">File a New Issue</a></li>
+    <li>Pull Requests: <a href="https://github.com/tc39/proposal-regexp-legacy-features/pulls">All Pull Requests</a>, <a href="https://github.com/tc39/proposal-regexp-legacy-features/pulls/new">Create a New Pull Request</a></li>
+    <!-- <li>Test Suite: <a href="https://github.com/tc39/test262">Test262</a></li> -->
+    <li>
+      <p>Community:</p>
+      <ul>
+        <li>Discourse: <a href="https://es.discourse.group">https://es.discourse.group</a></li>
+        <li>IRC: <a href="ircs://irc.freenode.net:6667">#tc39</a> on <a href="https://freenode.net/kb/answer/chat">freenode</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<emu-annex id="sec-additional-ecmascript-features-for-web-browsers">
+  <h1>Additional ECMAScript Features for Web Browsers</h1>
+  <emu-note>This is <a href="https://tc39.es/ecma262/#sec-additional-ecmascript-features-for-web-browsers">annex B</a> in the current spec.</emu-note>
+
+  <emu-annex id="sec-additional-built-in-properties">
+    <h1>Additional Built-in Properties</h1>
+
+    <emu-annex id="sec-additional-properties-of-the-regexp-constructor">
+      <h1>Additional Properties of the RegExp constructor</h1>
+      <p>The RegExp constructor has the following additional internal slots:</p>
+      <ul>
+        <li>[[RegExpInput]]</li>
+        <li>[[RegExpLastMatch]]</li>
+        <li>[[RegExpLastParen]]</li>
+        <li>[[RegExpLeftContext]]</li>
+        <li>[[RegExpRightContext]]</li>
+        <li>[[RegExpParen1]]</li>
+        <li>[[RegExpParen2]]</li>
+        <li>[[RegExpParen3]]</li>
+        <li>[[RegExpParen4]]</li>
+        <li>[[RegExpParen5]]</li>
+        <li>[[RegExpParen6]]</li>
+        <li>[[RegExpParen7]]</li>
+        <li>[[RegExpParen8]]</li>
+        <li>[[RegExpParen9]]</li>
+      </ul>
+      <p>The initial value of all these internal slots is the empty String.</p>
+
+      <emu-annex id="sec-additional-abstract-operations-for-the-regexp-constructor">
+        <h1>Additional Abstract Operations for the RegExp Constructor</h1>
+
+        <emu-annex id="sec-legacy-regexpalloc">
+          <h1>Changes to RS: RegExpAlloc</h1>
+          <p>RegExp instances have an additional slot which keeps a boolean value used for deciding whether nonstandard legacy features are enabled for that regexp. The following steps replace the first step of <emu-xref aoid="RegExpAlloc"></emu-xref>:</p>
+          <emu-alg>
+            1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, *"%RegExp.prototype%"*, &laquo; [[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]]<ins>, [[Realm]], [[LegacyFeaturesEnabled]]</ins> &raquo;).
+            1. <ins>Let _thisRealm_ be the current Realm Record.</ins>
+            1. <ins>Set _obj_.[[Realm]] to _thisRealm_.</ins>
+            1. <ins>If SameValue(_newTarget_, _thisRealm_.[[Intrinsics]].[[%RegExp%]]) is *true*, then</ins>
+              1. <ins>Set _obj_.[[LegacyFeaturesEnabled]] to *true*.</ins>
+            1. <ins>Else, set _obj_.[[LegacyFeaturesEnabled]] to *false*.</ins>
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-legacy-regexpbuiltinexec">
+          <h1>Changes to RS: RegExpBuiltinExec</h1>
+          <p>In the <emu-xref aoid="RegExpBuiltinExec"></emu-xref> abstract operation, a hook is added for updating the static properties of %RegExp% after a successful match. The last three steps of the algorithm are modified as follows:</p>
+
+          <emu-alg>
+            26. (current step 26) Perform ! CreateDataPropertyOrThrow(_A_, *"groups"*, _groups_).
+            1. <ins>Let _capturedValues_ be an new empty List.</ins>
+            1. (current step 27) For each integer _i_ such that _i_ &gt; 0 and _i_ &le; _n_, do
+              5. (current step 27.e) Perform ! CreateDataPropertyOrThrow(_A_, ! ToString(_i_), _capturedValue_).
+              1. If the _i_<sup>th</sup> capture of _R_ was defined with a |GroupName|, then
+                1. Let _s_ be the StringValue of the corresponding |RegExpIdentifierName|.
+                1. Perform ! CreateDataPropertyOrThrow(_groups_, _s_, _capturedValue_).
+              1. <ins>Append _capturedValue_ to the end of _capturedValues_.</ins>
+            1. <ins>Let _thisRealm_ be the current Realm Record.</ins>
+            1. <ins>If SameValue(_thisRealm_, _R_.[[Realm]]) is true, then</ins>
+              1. <ins>If _R_.[[LegacyFeaturesEnabled]] is *true*, then</ins>
+                1. <ins>Perform ! UpdateLegacyRegExpStaticProperties(%RegExp%, _S_, _lastIndex_, _e_, _capturedValues_).</ins>
+              1. <ins>Else, perform ! InvalidateLegacyRegExpStaticProperties(%RegExp%).</ins>
+            1. (current step 28) Return _A_.
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-updatelegacyregexpstaticproperties" aoid="UpdateLegacyRegExpStaticProperties">
+          <h1>UpdateLegacyRegExpStaticProperties ( _C_, _S_, _startIndex_, _endIndex_, _capturedValues_ )</h1>
+          <p>The abstract operation UpdateLegacyRegExpStaticProperties updates the values of the static properties of %RegExp% after a successful match.</p>
+          <emu-alg>
+            1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
+            1. Assert: Type(_S_) is String.
+            1. Let _len_ be the number of code units in _S_.
+            1. Assert: _startIndex_ and _endIndex_ are integers such that 0 &le; _startIndex_ &le; _endIndex_ &le; _len_.
+            1. Assert: _capturedValues_ is a List of Strings.
+            1. Let _n_ be the number of elements in _capturedValues_.
+            1. Set _C_.[[RegExpInput]] to _S_.
+            1. Set _C_.[[RegExpLastMatch]] to a String whose length is _endIndex_ - _startIndex_ and containing the code units from _S_ with indices _startIndex_ through _endIndex_ - 1, in ascending order.
+            1. If _n_ &gt; 0, set _C_.[[RegExpLastParen]] to the last element of _capturedValues_.
+            1. Else, set _C_.[[RegExpLastParen]] to the empty String.
+            1. Set _C_.[[RegExpLeftContext]] to a String whose length is _startIndex_ and containing the code units from _S_ with indices 0 through _startIndex_ - 1, in ascending order.
+            1. Set _C_.[[RegExpRightContext]] to a String whose length is _len_ - _endIndex_ and containing the code units from _S_ with indices _endIndex_ through _len_ - 1, in ascending order.
+            1. For each integer _i_ such that 1 &le; _i_ &le; 9
+                1. If _i_ &le; _n_, set _C_.[[RegExpParen<var>i</var>]] to the _i_th element of _capturedValues_.
+                1. Else, set _C_.[[RegExpParen<var>i</var>]] to the empty String.
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-invalidatelegacyregexpstaticproperties" aoid="InvalidateLegacyRegExpStaticProperties">
+          <h1>InvalidateLegacyRegExpStaticProperties ( _C_ )</h1>
+          <p>The abstract operation InvalidateLegacyRegExpStaticProperties marks the values of the static properties of %RegExp% as non-available.</p>
+          <emu-alg>
+            1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
+            1. Set the value of _C_'s internal slots defined in <emu-xref href="#sec-additional-properties-of-the-regexp-constructor"></emu-xref> to *empty*.
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-getlegacyregexpstaticproperty" aoid="GetLegacyRegExpStaticProperty">
+          <h1>GetLegacyRegExpStaticProperty( _C_, _thisValue_, _internalSlotName_ )</h1>
+          <p>The abstract operation GetLegacyRegExpStaticProperty is used when retrieving a value from a legacy RegExp static property.</p>
+          <emu-alg>
+            1. Assert: _C_ is an object that has an internal slot named _internalSlotName_.
+            2. If SameValue(_C_, _thisValue_) is false, throw a *TypeError* exception.
+            3. Let _val_ be the value of the internal slot of _C_ named _internalSlotName_.
+            4. If _val_ is *empty*, throw a *TypeError* exception.
+            3. Return _val_.
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-setlegacyregexpstaticproperty" aoid="SetLegacyRegExpStaticProperty">
+          <h1>SetLegacyRegExpStaticProperty( _C_, _thisValue_, _internalSlotName_, _val_ )</h1>
+          <p>The abstract operation SetLegacyRegExpStaticProperty is used when assigning a value to a legacy RegExp static property.</p>
+          <emu-alg>
+            1. Assert: _C_ is an object that has an internal slot named _internalSlotName_.
+            2. If SameValue(_C_, _thisValue_) is false, throw a *TypeError* exception.
+            3. Let _strVal_ be ? ToString(_val_).
+            4. Set the value of the internal slot of _C_ named _internalSlotName_ to _strVal_.
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+
+      <emu-annex id="sec-regexp.$_">
+        <h1>RegExp.$_</h1>
+        <p>*RegExp.$_* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-annex id="sec-get-regexp.$_">
+          <h1>get RegExp.$_</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpInput]]).
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-set-regexp.$_">
+          <h1>set RegExp.$_</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that takes an argument _val_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return ? SetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpInput]], _val_).
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$&">
+        <h1>RegExp.$&</h1>
+        <p>*RegExp.$&* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLastMatch]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$+">
+        <h1>RegExp.$+</h1>
+        <p>*RegExp.$+* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLastParen]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$`">
+        <h1>RegExp.$`</h1>
+        <p>*RegExp.$`* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLeftContext]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$'">
+        <h1>RegExp.$'</h1>
+        <p>*RegExp.$'* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpRightContext]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$1">
+        <h1>RegExp.$1</h1>
+        <p>*RegExp.$1* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen1]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$2">
+        <h1>RegExp.$2</h1>
+        <p>*RegExp.$2* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen2]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$3">
+        <h1>RegExp.$3</h1>
+        <p>*RegExp.$3* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen3]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$4">
+        <h1>RegExp.$4</h1>
+        <p>*RegExp.$4* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen4]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$5">
+        <h1>RegExp.$5</h1>
+        <p>*RegExp.$5* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen5]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$6">
+        <h1>RegExp.$6</h1>
+        <p>*RegExp.$6* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen6]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$7">
+        <h1>RegExp.$7</h1>
+        <p>*RegExp.$7* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen7]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$8">
+        <h1>RegExp.$8</h1>
+        <p>*RegExp.$8* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen8]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.$9">
+        <h1>RegExp.$9</h1>
+        <p>*RegExp.$9* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpParen9]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-regexp.input">
+        <h1>RegExp.input</h1>
+        <p>*RegExp.input* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true* }. The [[Get]] and [[Set]] attributes are defined as follows:</p>
+
+        <emu-annex id="sec-get-regexp.input">
+          <h1>get RegExp.input</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that requires no arguments. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpInput]]).
+          </emu-alg>
+        </emu-annex>
+
+        <emu-annex id="sec-set-regexp.input">
+          <h1>set RegExp.input</h1>
+          <p>The value of the [[Get]] attribute is a built-in function that takes an argument _val_. It performs the following steps when called:</p>
+          <emu-alg>
+            1. Return ? SetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpInput]], _val_).
+          </emu-alg>
+        </emu-annex>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.lastmatch">
+        <h1>RegExp.lastMatch</h1>
+        <p>*RegExp.lastMatch* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLastMatch]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.lastparen">
+        <h1>RegExp.lastParen</h1>
+        <p>*RegExp.lastParen* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLastParen]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.leftContext">
+        <h1>RegExp.leftContext</h1>
+        <p>*RegExp.leftContext* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpLeftContext]]).
+        </emu-alg>
+      </emu-annex>
+
+      <emu-annex id="sec-get-regexp.rightContext">
+        <h1>RegExp.rightContext</h1>
+        <p>*RegExp.rightContext* is an accessor property with attributes { [[Enumerable]]: *false*, [[Configurable]]: *true*, [[Set]]: *undefined* }. Its get accessor function performs the following steps:</p>
+        <emu-alg>
+          1. Return ? GetLegacyRegExpStaticProperty(%RegExp%, *this* value, [[RegExpRightContext]]).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+
+    <emu-annex id="sec-additional-properties-of-the-regexp.prototype-object">
+      <h1>Additional Properties of the RegExp.prototype Object</h1>
+
+      <emu-annex id="sec-regexp.prototype.compile">
+        <h1>RegExp.prototype.compile ( _pattern_, _flags_ )</h1>
+        <emu-alg>
+          1. Let _O_ be the *this* value.
+          1. Perform ? RequireInternalSlot(_O_, [[RegExpMatcher]]).
+          1. <ins>Let _thisRealm_ be the current Realm Record.</ins>
+          1. <ins>If SameValue(_thisRealm_, _O_.[[Realm]]) is *false*, throw a *TypeError* exception.</ins>
+          1. <ins>If _R_.[[LegacyFeaturesEnabled]] is *false*, throw a *TypeError* exception.</ins>
+          1. If Type(_pattern_) is Object and _pattern_ has a [[RegExpMatcher]] internal slot, then
+            1. If _flags_ is not *undefined*, throw a *TypeError* exception.
+            1. Let _P_ be _pattern_.[[OriginalSource]].
+            1. Let _F_ be _pattern_.[[OriginalFlags]].
+          1. Else,
+            1. Let _P_ be _pattern_.
+            1. Let _F_ be _flags_.
+          1. Return ? RegExpInitialize(_O_, _P_, _F_).
+        </emu-alg>
+      </emu-annex>
+    </emu-annex>
+  </emu-annex>
+</emu-annex>
