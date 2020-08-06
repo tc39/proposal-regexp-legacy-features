@@ -79,7 +79,7 @@ contributors: Claude Pache
             26. (current step 26) Perform ! CreateDataPropertyOrThrow(_A_, *"groups"*, _groups_).
             1. <ins>Let _capturedValues_ be an new empty List.</ins>
             1. (current step 27) For each integer _i_ such that _i_ &gt; 0 and _i_ &le; _n_, do
-              5. Perform ! CreateDataPropertyOrThrow(_A_, ! ToString(_i_), _capturedValue_).
+              5. (current step 27.e) Perform ! CreateDataPropertyOrThrow(_A_, ! ToString(_i_), _capturedValue_).
               1. If the _i_<sup>th</sup> capture of _R_ was defined with a |GroupName|, then
                 1. Let _s_ be the StringValue of the corresponding |RegExpIdentifierName|.
                 1. Perform ! CreateDataPropertyOrThrow(_groups_, _s_, _capturedValue_).
@@ -100,17 +100,17 @@ contributors: Claude Pache
             1. Assert: _C_ is an Object that has a [[RegExpInput]] internal slot.
             1. Assert: Type(_S_) is String.
             1. Let _len_ be the number of code units in _S_.
-            1. Assert: _startIndex_ and _endIndex_ are integers such that 0 ≤ _startIndex_ ≤ _endIndex_ ≤ _len_.
+            1. Assert: _startIndex_ and _endIndex_ are integers such that 0 &le; _startIndex_ &le; _endIndex_ &le; _len_.
             1. Assert: _capturedValues_ is a List of Strings.
             1. Let _n_ be the number of elements in _capturedValues_.
             1. Set _C_.[[RegExpInput]] to _S_.
             1. Set _C_.[[RegExpLastMatch]] to a String whose length is _endIndex_ - _startIndex_ and containing the code units from _S_ with indices _startIndex_ through _endIndex_ - 1, in ascending order.
-            1. If _n_ > 0, set _C_.[[RegExpLastParen]] to the last element of _capturedValues_.
+            1. If _n_ &gt; 0, set _C_.[[RegExpLastParen]] to the last element of _capturedValues_.
             1. Else, set _C_.[[RegExpLastParen]] to the empty String.
             1. Set _C_.[[RegExpLeftContext]] to a String whose length is _startIndex_ and containing the code units from _S_ with indices 0 through _startIndex_ - 1, in ascending order.
             1. Set _C_.[[RegExpRightContext]] to a String whose length is _len_ - _endIndex_ and containing the code units from _S_ with indices _endIndex_ through _len_ - 1, in ascending order.
-            1. For each integer _i_ such that 1 ≤ _i_ ≤ 9
-                1. If _i_ ≤ _n_, set _C_.[[RegExpParen<var>i</var>]] to the _i_th element of _capturedValues_.
+            1. For each integer _i_ such that 1 &le; _i_ &le; 9
+                1. If _i_ &le; _n_, set _C_.[[RegExpParen<var>i</var>]] to the _i_th element of _capturedValues_.
                 1. Else, set _C_.[[RegExpParen<var>i</var>]] to the empty String.
           </emu-alg>
         </emu-annex>
@@ -334,8 +334,7 @@ contributors: Claude Pache
         <h1>RegExp.prototype.compile ( _pattern_, _flags_ )</h1>
         <emu-alg>
           1. Let _O_ be the *this* value.
-          1. If Type(_O_) is not Object or Type(_O_) is Object and _O_ does not have a [[RegExpMatcher]] internal slot, then
-            1. Throw a *TypeError* exception.
+          1. Perform ? RequireInternalSlot(_O_, [[RegExpMatcher]]).
           1. <ins>Let _thisRealm_ be the current Realm Record.</ins>
           1. <ins>If SameValue(_thisRealm_, _O_.[[Realm]]) is *false*, throw a *TypeError* exception.</ins>
           1. <ins>If _R_.[[LegacyFeaturesEnabled]] is *false*, throw a *TypeError* exception.</ins>
