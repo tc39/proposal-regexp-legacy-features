@@ -33,7 +33,7 @@ All the amendments are part of Annex B, including those that modify objects or a
 
 ## [%RegExp%](https://tc39.github.io/ecma262/#sec-regexp-constructor)
 
-The %RegExp% instrinsic object, which is the builtin RegExp constructor, has the following additional internal slots:
+The %RegExp% intrinsic object, which is the builtin RegExp constructor, has the following additional internal slots:
 
 * [[RegExpInput]]
 * [[RegExpLastMatch]]
