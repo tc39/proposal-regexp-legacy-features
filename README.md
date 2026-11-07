@@ -57,7 +57,7 @@ The initial value of all these internal slots is the empty String.
 
 RegExp instances have an additional slot which optionally keeps a reference to its constructor. It is used for deciding whether a nonstandard legacy feature is enabled for that regexp. The RegExpAlloc abstract operation is modified as follows:
 
-1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExpPrototype%", «[[RegExpMatcher]], [[OriginalSource]], [[OriginalFlags]], **[[Realm]]**, **[[LegacyFeaturesEnabled]]**»).
+1. Let _obj_ be ? OrdinaryCreateFromConstructor(_newTarget_, "%RegExp.prototype%", «[[OriginalSource]], [[OriginalFlags]], [[RegExpRecord]], [[RegExpMatcher]], **[[Realm]]**, **[[LegacyFeaturesEnabled]]**»).
 1. **Let _thisRealm_ be the current Realm Record.**
 1. **Set the value of _obj_’s [[Realm]] internal slot to _thisRealm_.**
 1. **If SameValue(_newTarget_, _thisRealm_.[[Intrinsics]].[[%RegExp%]]) is true, then**
@@ -247,19 +247,15 @@ The abstract operation SetLegacyRegExpStaticProperty is used when assigning a va
 
 The modification below will disable RegExp.prototype.compile for objects that are not direct instances of RegExp as well as in case of mismatch between realms.
 
-1. Let _O_ be the this value.
-1. If Type(_O_) is not Object or Type(_O_) is Object and _O_ does not have a [[RegExpMatcher]] internal slot, then
-    1. Throw a TypeError exception.
+1. Let _obj_ be the this value.
+1. Perform ? RequireInternalSlot(_obj_, [[RegExpMatcher]]).
 1. **Let _thisRealm_ be the current Realm Record.**
-1. **Let _oRealm_ be the value of _O_’s [[Realm]] internal slot.**
-1. **If SameValue(_thisRealm_, _oRealm_) is false, throw a TypeError exception.**
-1. **If the value of _R_’s [[LegacyFeaturesEnabled]] internal slot is false, throw a TypeError exception.**
-1. If Type(_pattern_) is Object and _pattern_ has a [[RegExpMatcher]] internal slot, then
+1. **Let _objRealm_ be the value of _obj_’s [[Realm]] internal slot.**
+1. **If SameValue(_thisRealm_, _objRealm_) is false, throw a TypeError exception.**
+1. **If the value of _obj_’s [[LegacyFeaturesEnabled]] internal slot is false, throw a TypeError exception.**
+1. If _pattern_ is an Object and _pattern_ has a [[RegExpMatcher]] internal slot, then
     1. If _flags_ is not undefined, throw a TypeError exception.
-    1. Let _P_ be the value of _pattern_’s [[OriginalSource]] internal slot.
-    1. Let _F_ be the value of _pattern_’s [[OriginalFlags]] internal slot.
-1. Else,
-    1. Let _P_ be _pattern_.
-    1. Let _F_ be _flags_.
-1. Return ? RegExpInitialize(_O_, _P_, _F_).
+    1. Set _flags_ to _pattern_.[[OriginalFlags]].
+    1. Set _pattern_ to _pattern_.[[OriginalSource]].
+1. Return ? RegExpInitialize(_obj_, _pattern_, _flags_).
 
